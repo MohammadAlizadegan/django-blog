@@ -44,8 +44,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     #is_verified = models.BooleanField(default=False)
-    first_name = models.CharField(max_length=255)
-    last_name = models.CharField(max_length=255)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
@@ -57,3 +55,18 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
+
+class Profile(models.Model):
+    '''
+    Profile model to store additional information about the user.
+    '''
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    first_name = models.CharField(max_length=250, blank=True, null=True)
+    last_name = models.CharField(max_length=250, blank=True, null=True)
+    image = models.ImageField(blank=True, null=True)
+    description = models.TextField()
+    created_date = models.DateTimeField(auto_now_add=True)
+    updated_date = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.user.email
