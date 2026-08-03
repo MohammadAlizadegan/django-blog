@@ -4,7 +4,8 @@ from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from .models import Post
 from django.utils import timezone
-
+from django.views.generic.edit import FormView
+from .forms import PostForm
 
 class IndexView(TemplateView):
     """Shows index.html with CBV"""
@@ -26,7 +27,7 @@ class PostList(ListView):
         query = Post.objects.filter(status=True)
         return query
 
-    paginate_by = 3
+    #paginate_by = 3
 
 class PostDetailView(DetailView):
     model = Post
@@ -35,3 +36,13 @@ class PostDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         context['now'] = timezone.now()
         return context
+
+class ContactFormView(FormView):
+    template_name = 'contact.html'
+    form_class = PostForm
+    success_url = '/blog/post/'
+
+    def form_valid(self, form):
+        form.save()
+        return super().form_valid(form)
+    
