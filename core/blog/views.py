@@ -4,7 +4,7 @@ from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from .models import Post
 from django.utils import timezone
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 
 class IndexView(TemplateView):
@@ -51,4 +51,23 @@ class PostCreateView(CreateView):
     def form_valid(self, form):
         form.instance.author = self.request.user
         return super().form_valid(form)
-    
+
+class PostUpdateView(UpdateView):
+    model = Post
+    fields = ['author', 'title', 'content', 'status', 'category', 'published_at']
+    success_url = '/blog/post/'
+
+    def get_queryset(self):
+        return Post.objects.filter(author=self.request.user)
+
+    def get_form(self, form_class = None):
+        form = super().get_form(form_class)
+        form.fields['author'].disabled = True
+        return form
+
+class PostDeleteView(DeleteView):
+    model = Post
+    success_url = '/blog/post/'
+
+    def get_queryset(self):
+        return Post.objects.filter(author=self.request.user)
