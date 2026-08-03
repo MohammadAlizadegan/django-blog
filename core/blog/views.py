@@ -41,3 +41,14 @@ class PostCreateView(CreateView):
     model = Post
     fields = ['author', 'title', 'content', 'status', 'category', 'published_at']
     success_url = '/blog/post/'
+
+    def get_form(self, form_class = None):
+        form = super().get_form(form_class)
+        form.fields['author'].initial = self.request.user
+        form.fields['author'].disabled = True
+        return form
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+    
