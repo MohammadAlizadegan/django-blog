@@ -1,0 +1,207 @@
+
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ورود | Django Blog</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Tahoma, Arial, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            padding: 20px;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 420px;
+            background: #fff;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.18);
+        }
+
+        .logo {
+            width: 65px;
+            height: 65px;
+            margin: 0 auto 20px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        h1 {
+            text-align: center;
+            color: #222;
+            font-size: 26px;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #777;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            height: 50px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 0 15px;
+            font-size: 15px;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.12);
+        }
+
+        .login-button {
+            width: 100%;
+            height: 50px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-top: 5px;
+        }
+
+        .login-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .error {
+            background: #fff0f0;
+            color: #d93025;
+            border: 1px solid #ffd0d0;
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            text-align: center;
+        }
+
+        .bottom-text {
+            text-align: center;
+            margin-top: 25px;
+            color: #777;
+            font-size: 13px;
+        }
+
+        .bottom-text a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .bottom-text a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 30px 22px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="login-container">
+
+    <div class="logo">D</div>
+
+    <h1>خوش آمدید</h1>
+    <p class="subtitle">برای ادامه وارد حساب کاربری خود شوید</p>
+
+    {% if form.errors %}
+        <div class="error">
+            نام کاربری یا رمز عبور اشتباه است.
+        </div>
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label for="id_username">نام کاربری</label>
+            <input
+                type="text"
+                name="username"
+                id="id_username"
+                placeholder="نام کاربری خود را وارد کنید"
+                autocomplete="username"
+                required
+            >
+        </div>
+
+        <div class="form-group">
+            <label for="id_password">رمز عبور</label>
+            <input
+                type="password"
+                name="password"
+                id="id_password"
+                placeholder="رمز عبور خود را وارد کنید"
+                autocomplete="current-password"
+                required
+            >
+        </div>
+
+        <button type="submit" class="login-button">
+            ورود به حساب
+        </button>
+
+        {% if next %}
+            <input type="hidden" name="next" value="{{ next }}">
+        {% endif %}
+    </form>
+
+    <div class="bottom-text">
+        حساب کاربری ندارید؟
+        <a href="#">ثبت نام کنید</a>
+    </div>
+
+</div>
+
+</body>
+</html>
+

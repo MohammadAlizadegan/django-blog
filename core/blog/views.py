@@ -5,6 +5,7 @@ from django.views.generic.detail import DetailView
 from .models import Post
 from django.utils import timezone
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 class IndexView(TemplateView):
@@ -20,7 +21,7 @@ class IndexView(TemplateView):
 class RedirectToGoogle(RedirectView):
     url = 'https://google.com'
 
-class PostList(ListView):
+class PostList(LoginRequiredMixin, ListView):
     #model = Post
     context_object_name = 'posts'
     def get_queryset(self):
@@ -29,7 +30,7 @@ class PostList(ListView):
 
     #paginate_by = 3
 
-class PostDetailView(DetailView):
+class PostDetailView(LoginRequiredMixin ,DetailView):
     model = Post
 
     def get_context_data(self, **kwargs):
@@ -37,7 +38,7 @@ class PostDetailView(DetailView):
         context['now'] = timezone.now()
         return context
 
-class PostCreateView(CreateView):
+class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
     fields = ['author', 'title', 'content', 'status', 'category', 'published_at']
     success_url = '/blog/post/'
@@ -52,7 +53,7 @@ class PostCreateView(CreateView):
         form.instance.author = self.request.user
         return super().form_valid(form)
 
-class PostUpdateView(UpdateView):
+class PostUpdateView(LoginRequiredMixin, UpdateView):
     model = Post
     fields = ['author', 'title', 'content', 'status', 'category', 'published_at']
     success_url = '/blog/post/'
@@ -65,7 +66,7 @@ class PostUpdateView(UpdateView):
         form.fields['author'].disabled = True
         return form
 
-class PostDeleteView(DeleteView):
+class PostDeleteView(LoginRequiredMixin, DeleteView):
     model = Post
     success_url = '/blog/post/'
 
