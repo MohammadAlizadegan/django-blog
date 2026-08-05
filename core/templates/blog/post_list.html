@@ -13,7 +13,7 @@
             <h1>
                 <a href="{% url 'blog:post-detail' pk=post.id %}">{{post.title}}</a>
             </h1>
-            <h4>{{post.author}}, {{post.published_at}}{% if request.user == post.author %}, <a href="{% url 'blog:post-edit' pk=post.id %}">Edit</a>, <a href="{% url 'blog:post-delete' pk=post.id %}">Delete</a>{% endif %}</h4>
+            <h4>{{post.author.first_name}}, {{post.published_at}}{% if request.user == post.author %}, <a href="{% url 'blog:post-edit' pk=post.id %}">Edit</a>, <a href="{% url 'blog:post-delete' pk=post.id %}">Delete</a>{% endif %}</h4>
             <p>
                 {{post.content}}
             </p>
