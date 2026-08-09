@@ -37,4 +37,4 @@ def post_detail(request, id):
         return Response(serializer.data)
     elif request.method == "DELETE":
         post.delete()
-        return Response({"detail":"Item deleted successfullt"},status=status.HTTP_204_NO_CONTENT)
+        return Response({"detail":"Item deleted successfully"},status=status.HTTP_204_NO_CONTENT)
