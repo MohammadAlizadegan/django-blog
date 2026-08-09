@@ -1,3 +1,4 @@
+from django.db.migrations import serializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .serializers import PostSerializer
@@ -19,12 +20,14 @@ def post_list(request):
     return None
 
 
-@api_view(["GET"])
+@api_view(["GET", "PUT"])
 def post_detail(request, id):
     post = get_object_or_404(Post, pk=id, status=True)
-    return Response(PostSerializer(post).data)
-    # try:
-    #     post = Post.objects.get(pk=id)
-    #     return Response(PostSerializer(post).data)
-    # except Post.DoesNotExist:
-    #     return Response({"detail":"object does not exist"}, status=status.HTTP_404_NOT_FOUND)
+    if request.method == "GET":
+        return Response(PostSerializer(post).data)
+    elif request.method == "PUT":
+        serializer = PostSerializer(post, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
+    return None
