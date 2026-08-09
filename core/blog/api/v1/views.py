@@ -10,7 +10,7 @@ from django.shortcuts import get_object_or_404
 
 
 @api_view(["GET", "POST"])
-@permission_classes([IsAuthenticatedOrReadOnly])
+@permission_classes([IsAuthenticatedOrReadOnly]) #Everyone can see but can't create.
 def post_list(request):
     if request.method == "GET":
         posts = Post.objects.filter(status=True)
@@ -25,7 +25,7 @@ def post_list(request):
 
 
 @api_view(["GET", "PUT", "DELETE"])
-@permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticatedOrReadOnly]) #Everyone can see but can't edit and delete.
 def post_detail(request, id):
     post = get_object_or_404(Post, pk=id, status=True)
     if request.method == "GET":
