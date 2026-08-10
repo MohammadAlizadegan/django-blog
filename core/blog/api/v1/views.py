@@ -1,5 +1,3 @@
-from django.db.migrations import serializer
-from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly, IsAdminUser
 from rest_framework.response import Response
 from .serializers import PostSerializer
@@ -26,17 +24,25 @@ class PostList(APIView):
         serializer.save()
         return Response(serializer.data)
 
-@api_view(["GET", "PUT", "DELETE"])
-@permission_classes([IsAuthenticatedOrReadOnly]) #Everyone can see but can't edit and delete.
-def post_detail(request, id):
-    post = get_object_or_404(Post, pk=id, status=True)
-    if request.method == "GET":
-        return Response(PostSerializer(post).data)
-    elif request.method == "PUT":
-        serializer = PostSerializer(post, data=request.data)
+
+class PostDetail(APIView):
+    """
+    Retrieve, update or delete a post instance.
+    """
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    serializer_class = PostSerializer
+
+    def get(self, request, id):
+        post = get_object_or_404(Post, pk=id, status=True)
+        serializer = self.serializer_class(post)
+        return Response(serializer.data)
+    def put(self, request, id):
+        post = get_object_or_404(Post, pk=id, status=True)
+        serializer = self.serializer_class(post, data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)
-    elif request.method == "DELETE":
+    def delete(self, request, id):
+        post = get_object_or_404(Post, pk=id, status=True)
         post.delete()
         return Response({"detail":"Item deleted successfully"},status=status.HTTP_204_NO_CONTENT)
