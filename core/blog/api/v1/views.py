@@ -6,23 +6,23 @@ from .serializers import PostSerializer
 from ...models import Post
 from rest_framework import status
 from django.shortcuts import get_object_or_404
+from rest_framework.views import APIView
 
 
-
-@api_view(["GET", "POST"])
-@permission_classes([IsAuthenticatedOrReadOnly]) #Everyone can see but can't create.
-def post_list(request):
-    if request.method == "GET":
+class PostList(APIView):
+    """
+    List all published posts, or create a new post.
+    """
+    def get(self, request):
         posts = Post.objects.filter(status=True)
         serializer = PostSerializer(posts, many=True)
         return Response(serializer.data)
-    elif request.method == "POST":
-        serializer = PostSerializer(data=request.data) #It is important data= (it is used in is_valid function)
+
+    def post(self, request):
+        serializer = PostSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)
-    return None
-
 
 @api_view(["GET", "PUT", "DELETE"])
 @permission_classes([IsAuthenticatedOrReadOnly]) #Everyone can see but can't edit and delete.
