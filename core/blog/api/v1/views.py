@@ -13,6 +13,8 @@ class PostList(APIView):
     """
     List all published posts, or create a new post.
     """
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    serializer_class = PostSerializer
     def get(self, request):
         posts = Post.objects.filter(status=True)
         serializer = PostSerializer(posts, many=True)
