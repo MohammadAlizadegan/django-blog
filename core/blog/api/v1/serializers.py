@@ -1,4 +1,6 @@
 from rest_framework import serializers
+from unicodedata import category
+
 from ...models import Post, Category
 
 
@@ -10,12 +12,13 @@ from ...models import Post, Category
 class PostSerializer(serializers.ModelSerializer):
     snippet = serializers.ReadOnlyField(source='get_snippet')
     url = serializers.HyperlinkedIdentityField(view_name='blog:api-v1:post-detail', read_only=True)
+    category = serializers.SlugRelatedField(many=False, slug_field='name', queryset=Category.objects.all())
     class Meta:
         model=Post
-        fields = ['id', 'title', 'author', 'content', 'snippet','url', 'created_at', 'published_at', 'status']
+        fields = "__all__"
 
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = ['id', 'name']
+        fields = "__all__"
