@@ -20,8 +20,6 @@ class Post(models.Model):
         return self.title
     def get_snippet(self):
         return self.content[:5]
-    def get_absolute_api_url(self):
-        return reverse("blog:api-v1:post-detail", kwargs={"pk": self.pk})
 
 
 class Category(models.Model):
