@@ -8,9 +8,11 @@ from ...models import Post, Category
 #     status = serializers.BooleanField()
 
 class PostSerializer(serializers.ModelSerializer):
+    snippet = serializers.ReadOnlyField(source='get_snippet')
+    relative_url = serializers.URLField(source='get_absolute_api_url', read_only=True)
     class Meta:
         model=Post
-        fields = ['id', 'title', 'author', 'content', 'created_at', 'published_at', 'status']
+        fields = ['id', 'title', 'author', 'content', 'snippet','relative_url', 'created_at', 'published_at', 'status']
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
