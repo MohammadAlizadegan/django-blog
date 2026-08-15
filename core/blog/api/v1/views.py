@@ -8,6 +8,7 @@ from ...models import Post, Category
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from .paginations import MyPagination, MyCustomPagination
+from .filters import IsOwnerFilterBackend
 
 
 class PostModelViewSet(viewsets.ModelViewSet):
