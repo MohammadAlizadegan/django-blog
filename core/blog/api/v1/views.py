@@ -7,6 +7,8 @@ from .serializers import PostSerializer, CategorySerializer
 from ...models import Post, Category
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
+from .paginations import MyPagination, MyCustomPagination
+
 
 class PostModelViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticatedOrReadOnly, IsAuthorEditObjectOrReadOnly]
@@ -15,6 +17,8 @@ class PostModelViewSet(viewsets.ModelViewSet):
     filterset_fields = ['title', 'author__user', 'status', 'category']
     search_fields = ['title', 'content']
     ordering_fields = ['id', 'published_at']
+    pagination_class = MyCustomPagination
+
     def get_queryset(self):
         """This works better than queryset because queryset has cache."""
         return Post.objects.filter(status=True)
