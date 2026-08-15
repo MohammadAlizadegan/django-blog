@@ -1,3 +1,4 @@
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from .permissions import IsAuthorEditObjectOrReadOnly
@@ -9,7 +10,8 @@ from rest_framework.decorators import action
 class PostModelViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticatedOrReadOnly, IsAuthorEditObjectOrReadOnly]
     serializer_class = PostSerializer
-
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['title', 'author__user', 'status', 'category']
     def get_queryset(self):
         """This works better than queryset because queryset has cache."""
         return Post.objects.filter(status=True)
