@@ -11,9 +11,10 @@ from rest_framework.decorators import action
 class PostModelViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticatedOrReadOnly, IsAuthorEditObjectOrReadOnly]
     serializer_class = PostSerializer
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_fields = ['title', 'author__user', 'status', 'category']
     search_fields = ['title', 'content']
+    ordering_fields = ['id', 'published_at']
     def get_queryset(self):
         """This works better than queryset because queryset has cache."""
         return Post.objects.filter(status=True)
