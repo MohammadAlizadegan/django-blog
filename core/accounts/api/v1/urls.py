@@ -17,7 +17,7 @@ urlpatterns = [
     #ResetPassword
     #LoginToken
     #Login JWT
-    path('jwt/create/', TokenObtainPairView.as_view(), name='jwt-create'),
+    path('jwt/create/', views.CustomTokenObtainPairView.as_view(), name='jwt-create'),
     path('jwt/refresh/', TokenRefreshView.as_view(), name='jwt-refresh'),
     path('jwt/verify/', TokenVerifyView.as_view(), name='token_verify'),
 ]
