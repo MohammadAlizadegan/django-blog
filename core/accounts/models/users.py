@@ -1,8 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import (BaseUserManager, AbstractBaseUser, PermissionsMixin)
 from django.utils.translation import gettext_lazy as _
-from django.db.models.signals import post_save
-from django.dispatch import receiver
+
 
 class UserManager(BaseUserManager):
     '''
@@ -33,7 +32,7 @@ class UserManager(BaseUserManager):
         if extra_fields.get('is_superuser') is not True:
             raise ValueError(_('Superuser must have is_superuser=True.'))
         return self.create_user(email, password, **extra_fields)
-        
+
 
 
 class User(AbstractBaseUser, PermissionsMixin):
@@ -44,7 +43,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_superuser = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
-    #is_verified = models.BooleanField(default=False)
+    # is_verified = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
@@ -56,26 +55,3 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
-
-class Profile(models.Model):
-    '''
-    Profile model to store additional information about the user.
-    '''
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
-    first_name = models.CharField(max_length=250, blank=True, null=True)
-    last_name = models.CharField(max_length=250, blank=True, null=True)
-    image = models.ImageField(blank=True, null=True)
-    description = models.TextField()
-    created_date = models.DateTimeField(auto_now_add=True)
-    updated_date = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return self.user.email
-
-@receiver(post_save, sender=User)
-def save_profile(sender, instance, created, **kwargs):
-    '''
-    Signal to create a Profile instance whenever a new User instance is created.
-    '''
-    if created:
-        Profile.objects.create(user=instance)
